@@ -17,28 +17,37 @@ export const authorizeRole = (data: RoleAuthorizePayload) => {
         data
     })
 }
-
-
-export const getRoleList = () => {
-    return axios<Role[]>({
+export const getRoleList =()=> {
+    return axios({
         url: '/api/role/roleList',
         method: 'GET',
     })
 }
-
-export const getAllPermission = () => {
+export const getAllPermission =()=> {
     return axios({
         url: '/api/role/getAllPermission',
         method: 'GET',
     })
 }
-
-export const getPermissionOfCurrentRole = (roleId: number) => {
+export const getPermissionOfCurrentRole=(roleId:number)=>{
     return axios({
-        url: '/api/role/getPermissionOfCurrentRole',
-        method: 'GET',
-        params: {
-            roleId
+        url: '/api/role/getPermissionCurrentRole',
+        method:'GET',
+        params:{
+            roleId:roleId
         }
     })
 }
+export const deleteRole = (id: number) => {
+    return axios({
+        url: `/api/role/deleteRole/${id}`,
+        method: 'DELETE',
+    });
+};
+export const addRole = (data: { roleName: string;}) => {
+    return axios({
+        url: '/api/role/addRole',
+        method: 'POST',
+        data: data,
+    });
+};
