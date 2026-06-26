@@ -1,9 +1,9 @@
 import axios from "@/http/axios.ts";
 
-export interface newsData{
-    newsTitle: string
-    newsType: number
-    newsContent:string
+interface newsData {
+    title: string;
+    category: number;
+    content: string;
 }
 
 export  const saveNews=(data:newsData)=> {

@@ -42,11 +42,11 @@ const newsTitle = ref<string>('')
 // ---- 保存新闻 ----
 const saveNews = async () => {
   const newsData = {
-    newsTitle: newsTitle.value,
-    newsType: newsType.value,
-    newsContent: valueHtml.value,
+    title: newsTitle.value,      // 改为 title
+    category: newsType.value,    // 改为 category
+    content: valueHtml.value,    // 改为 content
   }
-  await save(newsData)   // 注意变量名是 newsData，别写错
+  await save(newsData)
 }
 
 </script>
