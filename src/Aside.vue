@@ -27,7 +27,7 @@
       <!-- 右侧主内容区 -->
       <main class="app-main">
         <div v-if="!currentComponent">
-          <h2>欢迎，{{ userStore.username }}</h2>
+          <h2>哇哈哈欢迎，{{ userStore.username }}</h2>
           <p>请从左侧菜单选择功能。</p>
         </div>
         <component v-else :is="currentComponent" />
