@@ -10,13 +10,13 @@ const editorRef = shallowRef<IDomEditor | null>(null)
 const mode = ref('default')
 const valueHtml = ref('')
 
-const toolbarConfig: Partial<IToolbarConfig> = {}   // ← 补上缺失的 toolbarConfig
+const toolbarConfig: Partial<IToolbarConfig> = {}
 
 const editorConfig: Partial<IEditorConfig> = {
   placeholder: '请输入文本..',
   MENU_CONF: {
     uploadImage: {
-      server: 'http://localhost:8080/api/news/uploadImg',   // 使用后端真实端口
+      server: '/api/news/uploadImg',   // 改为相对路径，通过 Nginx 代理到后端
       fieldName: 'wangeditor-uploaded-image',
       maxFileSize: 5 * 1024 * 1024,
       maxNumberOfFiles: 5,
@@ -41,14 +41,14 @@ const newsTitle = ref<string>('')
 
 // ---- 保存新闻 ----
 const saveNews = async () => {
-  // 注意：必须匹配后端接口的字段名 newsTitle / newsType / newsContent
   const newsData = {
     newsTitle: newsTitle.value,
     newsType: newsType.value,
     newsContent: valueHtml.value,
   }
-  await save(newsData)
+  await save(newsData)   // 注意变量名是 newsData，别写错
 }
+
 </script>
 
 <template>
