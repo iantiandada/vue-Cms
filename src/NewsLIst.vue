@@ -2,10 +2,18 @@
 import { onMounted, ref } from "vue";
 import {auditNews, deleteNews, newsList} from "@/http/news.ts";
 
-const newsListData = ref([]);
+const newsListData = ref<NewsItem[]>([]);
 const totalNum = ref(0);
 const currentPage = ref(1);
 const pageSize = 3;
+
+interface NewsItem {
+  id: number;
+  title: string;
+  content: string;
+  status: string;
+  auditStatus?: string;   // 改为可选，模板中的 select 可能会直接绑定
+}
 
 // HTML 标签去除和截断
 const stripHTML = (html: string) => {

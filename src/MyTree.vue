@@ -24,7 +24,7 @@ const typeName2Chinese=computed(()=>{
 const emit=defineEmits(['node-change'])
 const handleChange=(e: Event)=>{
   //如何知道自己勾选的是哪个
-  emit('node-change',props.item,e.target?.checked)
+  emit('node-change',props.item,(e.target as HTMLInputElement)?.checked)
 }
 const handleChildChange=(node:Permission,isChecked:boolean)=>{
   emit('node-change',node,isChecked)

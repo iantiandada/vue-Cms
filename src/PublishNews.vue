@@ -1,51 +1,53 @@
 <script setup lang="ts">
-
 import '@wangeditor/editor/dist/css/style.css'
-import {onBeforeUnmount,ref,shallowRef,onMounted} from "vue";
-import {Editor,Toolbar} from "@wangeditor/editor-for-vue";
-import {saveNews as save,} from "@/http/news.ts";
+import { onBeforeUnmount, ref, shallowRef } from 'vue'
+import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
+import type { IDomEditor, IEditorConfig, IToolbarConfig } from '@wangeditor/editor'
+import { saveNews as save } from '@/http/news.ts'
 
-const editorRef=shallowRef()
-const toolbarConfig= {}
-onBeforeUnmount(()=>{
-  const editor=editorRef.value
-  if(editor == null) return
-  editor.destroy()
-})
+// ---- 编辑器相关 ----
+const editorRef = shallowRef<IDomEditor | null>(null)
+const mode = ref('default')
+const valueHtml = ref('')
 
-const mode=ref("default")
-//内容html，提交给后端使用
-const valueHtml=ref()
-const editorConfig = {
-  placeholder:"请输入文本..",
-  MENU_CONF: {},
+const toolbarConfig: Partial<IToolbarConfig> = {}   // ← 补上缺失的 toolbarConfig
+
+const editorConfig: Partial<IEditorConfig> = {
+  placeholder: '请输入文本..',
+  MENU_CONF: {
+    uploadImage: {
+      server: 'http://localhost:8080/api/news/uploadImg',   // 使用后端真实端口
+      fieldName: 'wangeditor-uploaded-image',
+      maxFileSize: 5 * 1024 * 1024,
+      maxNumberOfFiles: 5,
+      allowedFileTypes: ['image/*'],
+      timeout: 5 * 1000,
+    },
+  },
 }
-editorConfig.MENU_CONF['uploadImage'] = {
-  server: 'http://localhost:9002/api/news/uploadImg',
-  // form-data fieldName，默认值 'wangeditor-uploaded-image'
-  fieldName: 'wangeditor-uploaded-image',
-  // 单个文件的最大体积限制，默认为 2M
-  maxFileSize: 5 * 1024 * 1024, // 1M
-  // 最多可上传几个文件，默认为 100
-  maxNumberOfFiles: 5,
-  // 选择文件时的类型限制，默认为 ['image/*'] 。如不想限制，则设置为 []
-  allowedFileTypes: ['image/*'],
-  // 超时时间，默认为 10 秒
-  timeout: 5 * 1000, // 5 秒
-}
-const handleCreated = (editor) => {
+
+const handleCreated = (editor: IDomEditor) => {
   editorRef.value = editor
 }
-const newsType=ref<number>(0)
-const newsTitle=ref<string>('')
-const saveNews = async()=>{
-  //准备data
-  let newsData = {
-    title :newsTitle.value,
-    category :newsType.value,
-    content:valueHtml.value
+
+onBeforeUnmount(() => {
+  const editor = editorRef.value
+  if (editor) editor.destroy()
+})
+
+// ---- 表单数据 ----
+const newsType = ref<number>(0)
+const newsTitle = ref<string>('')
+
+// ---- 保存新闻 ----
+const saveNews = async () => {
+  // 注意：必须匹配后端接口的字段名 newsTitle / newsType / newsContent
+  const newsData = {
+    newsTitle: newsTitle.value,
+    newsType: newsType.value,
+    newsContent: valueHtml.value,
   }
-  await save(newsData);
+  await save(newsData)
 }
 </script>
 
